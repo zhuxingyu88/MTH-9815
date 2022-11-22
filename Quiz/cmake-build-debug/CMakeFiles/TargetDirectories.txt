@@ -1,0 +1,4 @@
+/Users/zhuxingyu/CLionProjects/MTH 9815/Quiz/cmake-build-debug/CMakeFiles/ex1.dir
+/Users/zhuxingyu/CLionProjects/MTH 9815/Quiz/cmake-build-debug/CMakeFiles/ex2.dir
+/Users/zhuxingyu/CLionProjects/MTH 9815/Quiz/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/zhuxingyu/CLionProjects/MTH 9815/Quiz/cmake-build-debug/CMakeFiles/rebuild_cache.dir
