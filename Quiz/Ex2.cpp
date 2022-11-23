@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "QuickSort.hpp"
+#include <vector>
 
 using namespace std;
 
@@ -30,6 +30,7 @@ public:
                 j++;
             if (heap[id] <= heap[j])
                 break;
+            
             std::swap(heap[id], heap[j]);
             id = j;
         }
@@ -38,8 +39,8 @@ public:
     T Pop() {
         T result = -heap[0];
         swap(heap[0], heap[heap.size()-1]);
-        percolate_down(0);
         heap.pop_back();
+        percolate_down(0);
         return result;
     }
 };

@@ -224,13 +224,9 @@ CMakeFiles/ex2.dir/Ex2.cpp.o: ../Ex2.cpp \
   /Library/Developer/CommandLineTools/usr/include/c++/v1/__bsd_locale_defaults.h \
   /Library/Developer/CommandLineTools/usr/include/c++/v1/bitset \
   /Library/Developer/CommandLineTools/usr/include/c++/v1/__bit_reference \
-  ../QuickSort.hpp \
   /Library/Developer/CommandLineTools/usr/include/c++/v1/vector \
-  /Library/Developer/CommandLineTools/usr/include/c++/v1/__split_buffer \
-  /Library/Developer/CommandLineTools/usr/include/c++/v1/forward_list
+  /Library/Developer/CommandLineTools/usr/include/c++/v1/__split_buffer
 
-
-/Library/Developer/CommandLineTools/usr/include/c++/v1/forward_list:
 
 /Library/Developer/CommandLineTools/usr/include/c++/v1/__split_buffer:
 
@@ -267,8 +263,6 @@ CMakeFiles/ex2.dir/Ex2.cpp.o: ../Ex2.cpp \
 /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/sys/_types/_fd_setsize.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/sys/_types/_blkcnt_t.h:
-
-../QuickSort.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/sys/_types/_caddr_t.h:
 

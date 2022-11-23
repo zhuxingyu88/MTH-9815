@@ -222,7 +222,5 @@ CMakeFiles/ex2.dir/Ex2.cpp.o: \
   /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__bsd_locale_defaults.h \
   /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/bitset \
   /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__bit_reference \
-  /Users/zhuxingyu/CLionProjects/MTH\ 9815/Quiz/QuickSort.hpp \
   /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/vector \
-  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__split_buffer \
-  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/forward_list
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__split_buffer
