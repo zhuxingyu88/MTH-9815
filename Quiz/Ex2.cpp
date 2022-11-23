@@ -25,12 +25,12 @@ public:
     }
 
     void percolate_down(size_t id) {
-        for(size_t j = 2*id+1; j <= heap.size(); j = 2*id+1) {
-            if (j < heap.size() && (heap[j+1] < heap[j]))
+        for(size_t j = 2*id+1; j < heap.size(); j = 2*id+1) {
+            if (j < heap.size()-1 && (heap[j+1] < heap[j]))
                 j++;
             if (heap[id] <= heap[j])
                 break;
-            
+
             std::swap(heap[id], heap[j]);
             id = j;
         }
