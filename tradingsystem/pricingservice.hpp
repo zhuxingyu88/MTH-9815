@@ -152,7 +152,7 @@ public:
             offer1 += (offer_string[2]=='+')?0.:(stoi(offer_string.substr(2)) / 256.);
             offer1 += stod(offer_string.substr(0, 2)) / 32.;
             double spread = stod(data[3]) / 256.;
-            double mid = bid1 + 0.5*spread;
+            double mid = (bid1 + offer1) / 2.;
             Bond product = m_bond[bondId];
             Price<Bond> bondPrice(product , mid, spread);
             bprice_service.OnMessage(bondPrice);
