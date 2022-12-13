@@ -117,11 +117,11 @@ public:
         ifstream iFile;
         iFile.open("./Input/prices.txt");
         string line;
-        getline(iFile,line);
         try{
             for (int i = 0; i < counter; ++i)
                 getline(iFile,line);
         } catch(...){
+            iFile.close();
             return;
         }
         if (getline(iFile, line)) {
@@ -132,7 +132,7 @@ public:
             while (getline(sStream, tmp, ',')) {
                 data.push_back(tmp);
             }
-            string bondId=data[0];
+            string bondId = data[0];
             int index = 0;
             for (; index < data[1].size(); ++index) {
                 if (data[1][index] == '-')
@@ -157,6 +157,7 @@ public:
             Price<Bond> bondPrice(product , mid, spread);
             bprice_service.OnMessage(bondPrice);
         }
+        iFile.close();
     }
 };
 

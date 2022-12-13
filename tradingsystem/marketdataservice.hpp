@@ -224,6 +224,7 @@ public:
             for (int i = 0; i < counter; ++i)
                 getline(iFile,line);
         } catch(...){
+            iFile.close();
             return;
         }
         if (getline(iFile, line)) {

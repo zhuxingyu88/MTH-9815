@@ -9,7 +9,10 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 #include "soa.hpp"
+#include "products.hpp"
 
 // Trade sides
 enum Side { BUY, SELL };
@@ -67,9 +70,91 @@ class TradeBookingService : public Service<string,Trade <T> >
 public:
 
   // Book the trade
-  void BookTrade(const Trade<T> &trade) = 0;
+  virtual void BookTrade(const Trade<T> &trade) = 0;
 
 };
+
+class BondTradeBookService: public TradeBookingService<Bond> {
+private:
+    map<string, Trade<Bond> > bondTradeBooks;
+    vector<ServiceListener<Trade<Bond> >* > bondTradeListeners;
+public:
+    Trade<Bond>& GetData(string key) override {
+        return bondTradeBooks.find(key)->second;
+    }
+
+    void OnMessage(Trade<Bond> &data) override{
+        BookTrade(data);
+    }
+
+    void AddListener(ServiceListener<Trade<Bond> > *listener) override{
+        bondTradeListeners.push_back(listener);
+    }
+
+    const vector<ServiceListener<Trade<Bond> >* >& GetListeners() const override {
+        return bondTradeListeners;
+    }
+
+    void BookTrade(const Trade<Bond> &trade) override {
+        string tradeID = trade.GetTradeId();
+        auto tmp = bondTradeBooks.find(tradeID);
+        if (tmp != bondTradeBooks.end()){
+            bondTradeBooks.erase(tmp);
+            bondTradeBooks.insert(make_pair(tradeID, trade));
+            for (auto& listener: bondTradeListeners) {
+                listener->ProcessUpdate(bondTradeBooks.find(tradeID)->second);
+            }
+        } else {
+            bondTradeBooks.insert(make_pair(tradeID, trade));
+            for (auto& listener: bondTradeListeners) {
+                listener->ProcessAdd(bondTradeBooks.find(tradeID)->second);
+            }
+        }
+    }
+
+};
+
+class BondTradeBookingConnector: public Connector<Trade<Bond> > {
+private:
+    int counter;
+public:
+    virtual void Publish(Trade<Bond> &data) {}
+
+    BondTradeBookingConnector():counter(0) {}
+
+    virtual void Subscribe(BondTradeBookService& bt_book_service, map<string, Bond> m_bond) {
+        ifstream iFile;
+        iFile.open("./Input/trades.txt");
+        string line;
+        try{
+            for (int i = 0; i < counter; ++i)
+                getline(iFile,line);
+        } catch(...){
+            iFile.close();
+            return;
+        }
+        if (getline(iFile, line)) {
+            ++counter;
+            stringstream sStream(line);
+            string tmp;
+            vector<string> data;
+            while (getline(sStream, tmp, ',')) {
+                data.push_back(tmp);
+            }
+            string tradeID = data[0];
+            Bond product = m_bond[data[1]];
+            string bookID = data[2];
+            long quantity = stol(data[3]);
+            Side side = (data[4] == "BUY")?BUY:SELL;
+            double price = stod(data[5]);
+            Trade<Bond> trade(product, tradeID, price, bookID, quantity, side);
+            bt_book_service.OnMessage(trade);
+        }
+        iFile.close();
+    }
+};
+
+
 
 template<typename T>
 Trade<T>::Trade(const T &_product, string _tradeId, double _price, string _book, long _quantity, Side _side) :
