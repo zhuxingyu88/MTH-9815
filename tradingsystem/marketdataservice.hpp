@@ -210,7 +210,7 @@ class BondMarketDataConnector: public Connector<OrderBook<Bond> >
 private:
     int counter;
 public:
-    BondMarketDataConnector(){counter=0;}
+    BondMarketDataConnector():counter(0) {}
 
     virtual void Publish(OrderBook<Bond> &data){}
 
@@ -220,7 +220,13 @@ public:
         vector<Order> bidStack;
         vector<Order> offerStack;
         string line;
-        if (getline(iFile, line)){
+        try{
+            for (int i = 0; i < counter; ++i)
+                getline(iFile,line);
+        } catch(...){
+            return;
+        }
+        if (getline(iFile, line)) {
             ++counter;
             stringstream sStream(line);
             string tmp;
@@ -258,6 +264,7 @@ public:
             OrderBook<Bond> result(product, bidStack, offerStack);
             bondMarketDataService.OnMessage(result);
         }
+        iFile.close();
     }
 };
 

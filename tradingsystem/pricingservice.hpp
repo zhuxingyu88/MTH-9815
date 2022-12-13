@@ -8,7 +8,9 @@
 #define PRICING_SERVICE_HPP
 
 #include <string>
+#include <fstream>
 #include "soa.hpp"
+#include "products.hpp"
 
 /**
  * A price object consisting of mid and bid/offer spread.
@@ -74,5 +76,89 @@ double Price<T>::GetBidOfferSpread() const
 {
   return bidOfferSpread;
 }
+
+class BondPriceService: public PricingService<Bond> {
+private:
+    map<string, Price<Bond> > bondPrices;
+    vector<ServiceListener<Price<Bond> >* > bondPriceListeners;
+
+public:
+    Price<Bond>& GetData(string key) override{
+        return bondPrices.find(key)->second;
+    }
+
+    void OnMessage(Price<Bond> &data) override {
+        string productId = data.GetProduct().GetProductId();
+        if(bondPrices.find(productId) != bondPrices.end())
+            bondPrices.erase(productId);
+        bondPrices.insert(make_pair(productId, data));
+        for (auto & listener : bondPriceListeners)
+            listener->ProcessAdd(bondPrices.find(productId)->second);
+    }
+
+    void AddListener(ServiceListener<Price<Bond> > *listener) override {
+        bondPriceListeners.push_back(listener);
+    }
+
+    const vector< ServiceListener<Price<Bond> >* >& GetListeners() const override {
+        return bondPriceListeners;
+    }
+};
+
+class BondPriceConnector: public Connector<Price<Bond> > {
+private:
+    int counter;
+public:
+    BondPriceConnector():counter(0){}
+
+    virtual void Publish(Price<Bond> &data){}
+
+    virtual void Subscribe(BondPriceService& bprice_service, map<string, Bond> m_bond) {
+        ifstream iFile;
+        iFile.open("./Input/prices.txt");
+        string line;
+        getline(iFile,line);
+        try{
+            for (int i = 0; i < counter; ++i)
+                getline(iFile,line);
+        } catch(...){
+            return;
+        }
+        if (getline(iFile, line)) {
+            ++counter;
+            stringstream sStream(line);
+            string tmp;
+            vector<string> data;
+            while (getline(sStream, tmp, ',')) {
+                data.push_back(tmp);
+            }
+            string bondId=data[0];
+            int index = 0;
+            for (; index < data[1].size(); ++index) {
+                if (data[1][index] == '-')
+                    break;
+            }
+            double bid1 = stod(data[1].substr(0, index));
+            string bid_string = data[1].substr(index + 1);
+            bid1 += (bid_string[2]=='+')?0.:(stoi(bid_string.substr(2)) / 256.);
+            bid1 += stod(bid_string.substr(0, 2)) / 32.;
+            index = 0;
+            for (; index < data[2].size(); ++index) {
+                if (data[2][index] == '-')
+                    break;
+            }
+            double offer1 = stod(data[2].substr(0, index));
+            string offer_string = data[2].substr(index + 1);
+            offer1 += (offer_string[2]=='+')?0.:(stoi(offer_string.substr(2)) / 256.);
+            offer1 += stod(offer_string.substr(0, 2)) / 32.;
+            double spread = stod(data[3]) / 256.;
+            double mid = bid1 + 0.5*spread;
+            Bond product = m_bond[bondId];
+            Price<Bond> bondPrice(product , mid, spread);
+            bprice_service.OnMessage(bondPrice);
+        }
+    }
+};
+
 
 #endif
