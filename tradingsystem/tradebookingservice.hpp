@@ -154,8 +154,6 @@ public:
     }
 };
 
-
-
 template<typename T>
 Trade<T>::Trade(const T &_product, string _tradeId, double _price, string _book, long _quantity, Side _side) :
   product(_product)
