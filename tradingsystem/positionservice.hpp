@@ -81,8 +81,10 @@ long Position<T>::GetPosition(string &book)
 template<typename T>
 long Position<T>::GetAggregatePosition()
 {
-  // No-op implementation - should be filled out for implementations
-  return 0;
+  long ans = 0;
+  for(auto & position : positions)
+      ans += position.second;
+  return ans;
 }
 
 template<typename T>
