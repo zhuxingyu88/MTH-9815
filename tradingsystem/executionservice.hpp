@@ -277,44 +277,44 @@ public:
 class BondExecutionConnector: public Connector<pair<Market, ExecutionOrder<Bond> > > {
 public:
     void Publish(pair<Market, ExecutionOrder<Bond> > &data) override {
-        ofstream file;
-        file.open("./Output/ExecutionOrders.txt",ios_base::app);
+        ofstream oFile;
+        oFile.open("./Output/ExecutionOrders.txt", ios_base::app);
         Market market = data.first;
         ExecutionOrder<Bond> executionOrder = data.second;
         string orderId = executionOrder.GetOrderId();
-        file << orderId << ",";
+        oFile << orderId << ",";
         Bond product = executionOrder.GetProduct();
         string bondID = product.GetProductId();
-        file << bondID << ",";
+        oFile << bondID << ",";
         PricingSide side = executionOrder.GetSide();
         if (side == BID) {
-            file<<"BID,";
+            oFile << "BID,";
         } else {
-            file<<"OFFER,";
+            oFile << "OFFER,";
         }
         OrderType orderType = executionOrder.GetOrderType();
         switch(orderType){
-            case FOK: file << "FOK,";
+            case FOK: oFile << "FOK,";
                 break;
-            case IOC: file << "IOC,";
+            case IOC: oFile << "IOC,";
                 break;
-            case MARKET: file << "MARKET,";
+            case MARKET: oFile << "MARKET,";
                 break;
-            case LIMIT: file << "LIMIT,";
+            case LIMIT: oFile << "LIMIT,";
                 break;
-            case STOP: file << "STOP,";
+            case STOP: oFile << "STOP,";
                 break;
         }
         long visible = executionOrder.GetVisibleQuantity();
-        file << to_string(visible) << ",";
+        oFile << to_string(visible) << ",";
         long hidden = executionOrder.GetHiddenQuantity();
-        file << to_string(hidden) << ",";
+        oFile << to_string(hidden) << ",";
         switch(market){
-            case BROKERTEC: file<<"BROKERTEC,";
+            case BROKERTEC: oFile << "BROKERTEC,";
                 break;
-            case ESPEED: file<<"ESPEED,";
+            case ESPEED: oFile << "ESPEED,";
                 break;
-            case CME: file<<"CME,";
+            case CME: oFile << "CME,";
                 break;
         }
         double price = executionOrder.GetPrice();
@@ -329,7 +329,8 @@ public:
         } else {
             p_str=to_string(part1)+"-"+"0"+to_string(part2)+to_string(part3);
         }
-        file << p_str << "\n";
+        oFile << p_str << "\n";
+        oFile.close();
     }
 };
 
