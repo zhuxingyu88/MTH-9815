@@ -92,6 +92,10 @@ public:
   // Get the offer stack
   const vector<Order>& GetOfferStack() const;
 
+  void SetBidStack(const vector<Order>& offer) {bidStack = offer;}
+
+  void SetOfferStack(const vector<Order>& offer) {offerStack = offer;}
+
 private:
   T product;
   vector<Order> bidStack;
