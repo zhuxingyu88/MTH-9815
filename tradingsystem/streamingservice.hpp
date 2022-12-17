@@ -173,6 +173,8 @@ private:
 public:
     BondPriceListener(BondAlgoStreamingService& src): bondAlgoStreamingService(src){}
 
+    virtual ~BondPriceListener() = default;
+
     void ProcessUpdate(Price<Bond> &data) override{}
 
     void ProcessRemove(Price<Bond> &data) override{}
@@ -269,7 +271,9 @@ class BondAlgoStreamListener: public ServiceListener<PriceStream<Bond> >
 private:
     BondStreamingService& b_stream_service;
 public:
-    BondAlgoStreamListener(BondStreamingService& src): b_stream_service(src){}//constructor
+    BondAlgoStreamListener(BondStreamingService& src): b_stream_service(src){}
+
+    virtual ~BondAlgoStreamListener() = default;
 
     void ProcessUpdate(PriceStream<Bond> &data) override{}
 

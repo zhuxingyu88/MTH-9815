@@ -145,20 +145,6 @@ bool ExecutionOrder<T>::IsChildOrder() const
 {
   return isChildOrder;
 }
-//
-//template<typename T>
-//class AlgoExecution
-//{
-//private:
-//    ExecutionOrder<T>& exe_orders; //each algo execution is associated with a vector of references
-//public:
-//    //constructor
-//    AlgoExecution(ExecutionOrder<T>& m_exe_order): exe_orders(m_exe_order){}
-//    //get execution order
-//    ExecutionOrder<T>& GetExecutionOrder(){return exe_orders;}
-//    //set execution order
-//    void SetExecutionOrder(const ExecutionOrder<T>& src){exe_orders=src;}
-//};
 
 template<typename T>
 class AlgoExecutionService: public Service<string, ExecutionOrder<T> > {
@@ -266,6 +252,8 @@ private:
     BondAlgoExecutionService& bondAlgoExecutionService;
 public:
     explicit BondMarketDataListeners(BondAlgoExecutionService& src): bondAlgoExecutionService(src){}
+
+    virtual ~BondMarketDataListeners() = default;
 
     void ProcessUpdate(OrderBook<Bond> &data) override{bondAlgoExecutionService.Execute(data);}
 
@@ -376,6 +364,8 @@ private:
     BondExecutionService& bondExecutionService;
 public:
     explicit BondAlgoExecutionListener(BondExecutionService& src): bondExecutionService(src){}
+
+    virtual ~BondAlgoExecutionListener() = default;
 
     void ProcessUpdate(ExecutionOrder<Bond> &data) override {}
 

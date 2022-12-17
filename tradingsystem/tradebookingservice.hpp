@@ -146,7 +146,7 @@ public:
             string bookID = data[2];
             long quantity = stol(data[3]);
             Side side = (data[4] == "BUY")?BUY:SELL;
-            double price = stod(data[5]);
+            double price = 100;
             Trade<Bond> trade(product, tradeID, price, bookID, quantity, side);
             bt_book_service.OnMessage(trade);
         }

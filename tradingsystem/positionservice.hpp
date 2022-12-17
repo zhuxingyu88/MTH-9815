@@ -138,7 +138,9 @@ private:
     BondPositionService& bondPositionService;
 public:
 
-    BondTradeListener(BondPositionService& service): bondPositionService(service){}
+    explicit BondTradeListener(BondPositionService& service): bondPositionService(service){}
+
+    virtual ~BondTradeListener() = default;
 
     void ProcessAdd(Trade<Bond> &data) override{
         bondPositionService.AddTrade(data);

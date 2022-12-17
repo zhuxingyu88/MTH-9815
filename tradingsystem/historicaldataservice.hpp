@@ -78,6 +78,8 @@ private:
 public:
     BondPositionHistoricalListener(BondPositionHistoricalData& src): b_historical_data(src){}
 
+    virtual ~BondPositionHistoricalListener() = default;
+
     void ProcessAdd(Position<Bond> &data) override{}
 
     void ProcessRemove(Position<Bond> &data) override{}
@@ -119,7 +121,7 @@ public:
         PV01<Bond> thepv01=data.b_pv01;
         oFile << data.b_pv01.GetProduct().GetProductId() << ",";
         //get pv01
-        double pv01_d=thepv01.GetPV01();
+//        double pv01_d=thepv01.GetPV01();
         oFile << to_string(data.b_pv01.GetQuantity()) << ",";
         PV01<BucketedSector<Bond> > sector_pv01 = data.front_end;
         oFile << to_string(sector_pv01.GetPV01()) << ",";
@@ -191,6 +193,8 @@ private:
 public:
     explicit BondPV01HistoricalListener(PV01<Bond>& data_):theData(data_),needProcessed(false){}
 
+    virtual ~BondPV01HistoricalListener() = default;
+
     void ProcessAdd(PV01<Bond> &data) override{
         theData=data;needProcessed=true;
     }
@@ -212,6 +216,7 @@ private:
     BondRiskRecordListener& b_risk_record_listener;
 public:
     BondSectorsRiskListener(BondPV01HistoricalListener& src1, BondRiskRecordListener& src2): b_pv01_listener(src1),b_risk_record_listener(src2) {}
+    virtual ~BondSectorsRiskListener() = default;
 
     void ProcessAdd(SectorsRisk &data) override{}
 
@@ -265,6 +270,8 @@ private:
     BondExecutionHistoricalData& b_historical_data;//to flow into
 public:
     explicit BondExecutionHistoricalListener(BondExecutionHistoricalData& src): b_historical_data(src){}
+
+    virtual ~BondExecutionHistoricalListener() = default;
 
     void ProcessUpdate(ExecutionOrder<Bond> &data) override{}
 
@@ -361,6 +368,8 @@ private:
     BondIqHistoricalData& b_historical_data;
 public:
     BondIqHistoricalListener(BondIqHistoricalData& src): b_historical_data(src){}
+
+    virtual ~BondIqHistoricalListener() = default;
 
     void ProcessUpdate(Inquiry<Bond> &data) override{
         b_historical_data.SetPersistKey(data);
@@ -460,16 +469,16 @@ public:
 class BondStreamHistoricalListener: public ServiceListener<PriceStream<Bond> >
 {
 private:
-    BondStreamHistoricalData& b_historical_data;//to flow into
+    BondStreamHistoricalData& b_historical_data;
 public:
     explicit BondStreamHistoricalListener(BondStreamHistoricalData& src): b_historical_data(src){}
-    // Listener callback to process an update event to the Service
+
+    virtual ~BondStreamHistoricalListener() = default;
+
     void ProcessUpdate(PriceStream<Bond> &data) override{}
 
-    // Listener callback to process a remove event to the Service
     void ProcessRemove(PriceStream<Bond> &data) override{}
 
-    // Listener callback to process an add event to the Service
     void ProcessAdd(PriceStream<Bond> &data) override{b_historical_data.SetPersistKey(data);}
 };
 

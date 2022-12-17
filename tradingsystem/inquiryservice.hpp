@@ -258,6 +258,8 @@ private:
 public:
     BondInquiryListener(BondInquiryService& src):b_inquire(src){}
 
+    virtual ~BondInquiryListener() = default;
+
     virtual void ProcessAdd(Inquiry<Bond> &data) {
         const string& inquiryId = data.GetInquiryId();
         double price = 100;

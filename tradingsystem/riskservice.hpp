@@ -179,6 +179,7 @@ private:
     BondRiskService& bnd_risk_service;
 public:
     BondPositionServiceListener(BondRiskService& bnd_risk): bnd_risk_service(bnd_risk){}
+    virtual ~BondPositionServiceListener() = default;
     // Listener callback to process an add event to the Service
     virtual void ProcessAdd(Position<Bond> &data){
         bnd_risk_service.AddPosition(data);
