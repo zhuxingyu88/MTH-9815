@@ -41,6 +41,7 @@ int main() {
     m_bond_pv01[bids[3]]=0.017;
     m_bond_pv01[bids[4]]=0.0707;
     m_bond_pv01[bids[5]]=0.0455;
+    m_bond_pv01[bids[6]]=0.0235;
     PV01<Bond> temp(m_bond[bids[0]],0,0);
     //configure services, listeners, etc and link them together
     BondTradeBookService bt_service;//construct trade book service
